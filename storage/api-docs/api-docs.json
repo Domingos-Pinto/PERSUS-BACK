@@ -247,9 +247,480 @@
                     }
                 ]
             }
+        },
+        "/api/posts": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Lista todas as publicações",
+                "operationId": "e9eaf7df702a94f4443677bd1a36cfe6",
+                "responses": {
+                    "200": {
+                        "description": "Lista de publicações"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Cria uma nova publicação",
+                "operationId": "4a657e51a0066c64781851f2fd2651e2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "content": {
+                                        "type": "string"
+                                    },
+                                    "published_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                    },
+                                    "cover_image": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Publicação criada com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumCsrf": []
+                    }
+                ]
+            }
+        },
+        "/api/posts/{id}": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Mostra uma publicação específica",
+                "operationId": "b0f9d92879218f68a376b6edc6467c67",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Publicação encontrada"
+                    },
+                    "404": {
+                        "description": "Publicação não encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Atualiza uma publicação existente",
+                "operationId": "929614537d76a081a92170a41ed3bdb3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "content": {
+                                        "type": "string"
+                                    },
+                                    "published_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "nullable": true
+                                    },
+                                    "cover_image": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Publicação atualizada com sucesso"
+                    },
+                    "404": {
+                        "description": "Publicação não encontrada"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumCsrf": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Posts"
+                ],
+                "summary": "Apaga uma publicação",
+                "operationId": "fad1726bd24cd459fc1525b67985df39",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Publicação apagada com sucesso"
+                    },
+                    "404": {
+                        "description": "Publicação não encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumCsrf": []
+                    }
+                ]
+            }
+        },
+        "/api/settings": {
+            "get": {
+                "tags": [
+                    "Settings"
+                ],
+                "summary": "Mostra as configurações atuais do site",
+                "operationId": "5f4b94b8d31c0af3dc8b11e410511824",
+                "responses": {
+                    "200": {
+                        "description": "Configurações do site"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Settings"
+                ],
+                "summary": "Atualiza as configurações do site",
+                "operationId": "c350c6a9517e914dd010c265723ea275",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "phone": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "whatsapp_link": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "instagram_link": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "facebook_link": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "maintenance_mode": {
+                                        "type": "boolean",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Configurações atualizadas com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumCsrf": []
+                    }
+                ]
+            }
+        },
+        "/api/works": {
+            "get": {
+                "tags": [
+                    "Works"
+                ],
+                "summary": "Lista todos os trabalhos",
+                "operationId": "23b0328f5cca6550ea82e92d5dc13749",
+                "responses": {
+                    "200": {
+                        "description": "Lista de trabalhos com imagens"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Works"
+                ],
+                "summary": "Cria um novo trabalho",
+                "operationId": "785d45104ec84514c2eea6c8e4f1eed9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "category": {
+                                        "type": "string",
+                                        "enum": [
+                                            "tv_panel",
+                                            "custom_furniture",
+                                            "false_ceiling",
+                                            "letters_3d",
+                                            "signs_3d"
+                                        ]
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Trabalho criado com sucesso"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumCsrf": []
+                    }
+                ]
+            }
+        },
+        "/api/works/{id}": {
+            "get": {
+                "tags": [
+                    "Works"
+                ],
+                "summary": "Mostra um trabalho específico",
+                "operationId": "e7e932c0610b5dc69c7dffa1b772a2bf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Trabalho encontrado"
+                    },
+                    "404": {
+                        "description": "Trabalho não encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Works"
+                ],
+                "summary": "Atualiza um trabalho existente",
+                "operationId": "51cc2045a04e39a989500a022867be8b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "category": {
+                                        "type": "string",
+                                        "enum": [
+                                            "tv_panel",
+                                            "custom_furniture",
+                                            "false_ceiling",
+                                            "letters_3d",
+                                            "signs_3d"
+                                        ]
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Trabalho atualizado com sucesso"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    },
+                    "404": {
+                        "description": "Trabalho não encontrado"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumCsrf": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Works"
+                ],
+                "summary": "Apaga um trabalho",
+                "operationId": "7aae4bc37874d9fb8578d55ee6798e5e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Trabalho apagado com sucesso"
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    },
+                    "404": {
+                        "description": "Trabalho não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctumCsrf": []
+                    }
+                ]
+            }
         }
     },
     "tags": [
+        {
+            "name": "Posts",
+            "description": "Gestão do blog"
+        },
+        {
+            "name": "Settings",
+            "description": "Configurações gerais do site"
+        },
+        {
+            "name": "Works",
+            "description": "Gestão de trabalhos/portfólio"
+        },
         {
             "name": "Auth",
             "description": "Auth"
