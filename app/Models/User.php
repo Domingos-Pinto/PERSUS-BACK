@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\Status;
 use App\Enums\Role;
+use App\Notifications\ResetPasswordNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -17,7 +18,7 @@ use Illuminate\Notifications\Notifiable;
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-   
+
     use HasFactory, Notifiable;
 
     /**
@@ -33,5 +34,14 @@ class User extends Authenticatable
             'role' => Role::class,
             'status'=> Status::class,
         ];
+    }
+
+    /**
+     * Envia o link de recuperação de senha usando a nossa notificação
+     * customizada (aponta para o frontend React, não para uma view Blade).
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

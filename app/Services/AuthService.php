@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Enums\Status;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
 
 class AuthService
 {
@@ -24,33 +25,37 @@ class AuthService
     }
 
     public function update(array $data)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    if (!$user) {
-        return ['error' => 'Não autenticado'];
+        if (!$user) {
+            return ['error' => 'Não autenticado'];
+        }
+
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        $user->update($data);
+
+        return ['user' => $user];
     }
 
-    $user->update($data);
+    public function block(User $target)
+    {
+        $target->status = Status::BLOCKED;
+        $target->save();
 
-    return ['user' => $user];
-}
+        return ['message' => "{$target->name} bloqueado"];
+    }
 
-  public function block(User $target)
-{
-    $target->status = Status::BLOCKED;
-    $target->save();
+    public function unblock(User $target)
+    {
+        $target->status = Status::UNBLOCKED;
+        $target->save();
 
-    return ['message' => "{$target->name} bloqueado"];
-}
-
-public function unblock(User $target)
-{
-    $target->status = Status::UNBLOCKED;
-    $target->save();
-
-    return ['message' => "{$target->name} desbloqueado"];
-}
+        return ['message' => "{$target->name} desbloqueado"];
+    }
 
     public function login(array $credential)
     {
@@ -86,5 +91,48 @@ public function unblock(User $target)
             'role' => $user->role,
             'status' => $user->status,
         ];
+    }
+
+    public function forgotPassword(string $email): bool
+    {
+        $status = Password::sendResetLink(['email' => $email]);
+
+        return $status === Password::RESET_LINK_SENT;
+    }
+
+    public function resetPassword(array $data): bool
+    {
+        $status = Password::reset(
+            $data,
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => bcrypt($password),
+                ])->save();
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET;
+    }
+
+    // Lista de funcionários (role editor) para o painel de admin.
+    public function listEmployees()
+    {
+        return User::where('role', Role::EDITOR)
+            ->orderBy('name')
+            ->get(['id', 'name', 'email', 'phone', 'status']);
+    }
+
+  
+    public function createEmployee(array $data)
+    {
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'phone' => $data['phone'],
+            'role' => Role::EDITOR,
+        ]);
+
+        return ['user' => $user];
     }
 }

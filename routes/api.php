@@ -8,6 +8,8 @@ use App\Http\Controllers\SettingController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
 Route::get('/works', [WorkController::class, 'index']);
 Route::get('/works/{id}', [WorkController::class, 'show']);
@@ -21,6 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::put('/me', [AuthController::class, 'update']);
+    Route::get('/employees', [AuthController::class, 'employees']);
+    Route::post('/employees', [AuthController::class, 'storeEmployee']);
     Route::post('/users/{user}/block', [AuthController::class, 'block']);
     Route::post('/users/{user}/unblock', [AuthController::class, 'unblock']);
 
