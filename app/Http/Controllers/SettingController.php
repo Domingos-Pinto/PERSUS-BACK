@@ -53,11 +53,16 @@ class SettingController extends Controller
             new OA\Response(response: 422, description: 'Erro de validação')
         ]
     )]
-
     public function update(Request $request)
     {
-  
         $httpUrlRule = ['nullable', 'url', 'regex:/^https?:\/\//i'];
+
+        $imageRule = [
+            'nullable',
+            'file',
+            'mimes:jpg,jpeg,png,gif,bmp,svg,webp,heic,heif,tiff,tif,avif,ico',
+            'max:8192', 
+        ];
 
         $validated = $request->validate([
             'phone'             => ['nullable', 'string', 'max:50'],
@@ -67,22 +72,33 @@ class SettingController extends Controller
             'instagram_link'    => $httpUrlRule,
             'facebook_link'     => $httpUrlRule,
             'maintenance_mode'  => ['nullable', 'boolean'],
-            'welcome_hero_image'      => ['nullable', 'image', 'max:5120'],
-            'welcome_secondary_image' => ['nullable', 'image', 'max:5120'],
-            'about_image'             => ['nullable', 'image', 'max:5120'],
-            // Novos: galeria da secção "Sobre" (2 imagens secundárias)
-            'about_image_2'           => ['nullable', 'image', 'max:5120'],
-            'about_image_3'           => ['nullable', 'image', 'max:5120'],
-            // Novos: fotos decorativas do rodapé (esquerda/direita)
-            'footer_image_left'       => ['nullable', 'image', 'max:5120'],
-            'footer_image_right'      => ['nullable', 'image', 'max:5120'],
+            'welcome_hero_image'      => $imageRule,
+            'welcome_secondary_image' => $imageRule,
+            'about_image'             => $imageRule,
+            'about_image_2'           => $imageRule,
+            'about_image_3'           => $imageRule,
+            'footer_image_left'       => $imageRule,
+            'footer_image_right'      => $imageRule,
         ], [
             'whatsapp_link.regex'  => 'O link do WhatsApp tem de começar por http:// ou https://',
             'instagram_link.regex' => 'O link do Instagram tem de começar por http:// ou https://',
             'facebook_link.regex'  => 'O link do Facebook tem de começar por http:// ou https://',
+            'welcome_hero_image.mimes'      => 'Formato de imagem não suportado.',
+            'welcome_secondary_image.mimes' => 'Formato de imagem não suportado.',
+            'about_image.mimes'             => 'Formato de imagem não suportado.',
+            'about_image_2.mimes'           => 'Formato de imagem não suportado.',
+            'about_image_3.mimes'           => 'Formato de imagem não suportado.',
+            'footer_image_left.mimes'       => 'Formato de imagem não suportado.',
+            'footer_image_right.mimes'      => 'Formato de imagem não suportado.',
+            'welcome_hero_image.max'      => 'A imagem é demasiado grande (máx. 8MB).',
+            'welcome_secondary_image.max' => 'A imagem é demasiado grande (máx. 8MB).',
+            'about_image.max'             => 'A imagem é demasiado grande (máx. 8MB).',
+            'about_image_2.max'           => 'A imagem é demasiado grande (máx. 8MB).',
+            'about_image_3.max'           => 'A imagem é demasiado grande (máx. 8MB).',
+            'footer_image_left.max'       => 'A imagem é demasiado grande (máx. 8MB).',
+            'footer_image_right.max'      => 'A imagem é demasiado grande (máx. 8MB).',
         ]);
 
-    
         if (Auth::user()->role !== Role::ADMIN) {
             unset(
                 $validated['phone'],

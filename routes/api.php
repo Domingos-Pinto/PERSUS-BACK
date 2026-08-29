@@ -15,7 +15,7 @@ Route::get('/works', [WorkController::class, 'index']);
 Route::get('/works/{id}', [WorkController::class, 'show']);
 
 Route::get('/posts', [PostController::class, 'index']);
-Route::get('/posts/{id}', [PostController::class, 'show']);
+Route::get('/posts/slug/{slug}', [PostController::class, 'showBySlug']);
 
 Route::get('/settings', [SettingController::class, 'show']);
 
@@ -32,9 +32,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/works/{id}', [WorkController::class, 'update']);
     Route::delete('/works/{id}', [WorkController::class, 'destroy']);
 
+    Route::get('/posts/admin', [PostController::class, 'adminIndex']);
+    Route::get('/posts/{id}', [PostController::class, 'show']);
     Route::post('/posts', [PostController::class, 'store']);
     Route::put('/posts/{id}', [PostController::class, 'update']);
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
 
     Route::put('/settings', [SettingController::class, 'update']);
 });
+
